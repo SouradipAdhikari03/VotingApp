@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/votes")
 @CrossOrigin
@@ -25,5 +27,9 @@ public class VotingController {
         Vote vote=votingService.castVote(voteRequestDTO.getVoterId(),voteRequestDTO.getCandidateId());
         VoteResponseDTO voteResponseDTO=  new VoteResponseDTO("Vote casted successfully",true,vote.getVoterId(),vote.getCandidateId());
         return new ResponseEntity<>(voteResponseDTO, HttpStatus.CREATED);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<Vote>> getAllVotes(){
+    return new ResponseEntity<>(votingService.getAllVotes(),HttpStatus.OK);
     }
 }

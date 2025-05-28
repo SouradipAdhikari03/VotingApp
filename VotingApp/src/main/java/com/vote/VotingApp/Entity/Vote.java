@@ -1,5 +1,6 @@
 package com.vote.VotingApp.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,10 +18,12 @@ public class Vote {
 
     @OneToOne
     @JoinColumn(name = "voterId", unique = true)
+    @JsonIgnore
     private Voter voter;
 
     @ManyToOne
     @JoinColumn(name = "candidateId")
+    @JsonIgnore
     private Candidate candidate;
 
     @JsonProperty("VoterID")

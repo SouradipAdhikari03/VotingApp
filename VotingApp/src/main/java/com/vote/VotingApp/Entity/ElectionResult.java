@@ -1,5 +1,7 @@
 package com.vote.VotingApp.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -15,5 +17,11 @@ public class ElectionResult {
     private int totalVotes;
     @OneToOne
     @JoinColumn(name = "winner_id")
+    @JsonIgnore
     private Candidate winner;
+
+    @JsonProperty("winnerId")
+    public Long getWinnerId(){
+        return winner!=null?winner.getCandidateId():null;
+    }
 }
