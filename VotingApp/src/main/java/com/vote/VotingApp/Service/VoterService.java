@@ -1,5 +1,6 @@
 package com.vote.VotingApp.Service;
 
+import com.vote.VotingApp.DTO.VoterDTO;
 import com.vote.VotingApp.Entity.Candidate;
 import com.vote.VotingApp.Entity.Vote;
 import com.vote.VotingApp.Entity.Voter;
@@ -10,6 +11,7 @@ import com.vote.VotingApp.Repo.VoterRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -22,10 +24,13 @@ public class VoterService {
         this.voterRepo = voterRepo;
         this.candidateRepo = candidateRepo;
     }
-    public Voter registerVoter(Voter voter){
-        if(voterRepo.existsByVoterEmail(voter.getVoterEmail())){
-            throw new DuplicateResourceException("Voter with email: "+voter.getVoterEmail()+" already exists");
+    public Voter registerVoter(VoterDTO voterDTO){
+        if(voterRepo.existsByVoterEmail(voterDTO.getVoterEmail())){
+            throw new DuplicateResourceException("Voter with email: "+voterDTO.getVoterEmail()+" already exists");
         }
+        Voter voter=new Voter();
+        voter.setVoterName(voterDTO.getVoterName());
+        voter.setVoterEmail(voterDTO.getVoterEmail());
         return voterRepo.save(voter);
     }
     public List<Voter> getAllVoter(){

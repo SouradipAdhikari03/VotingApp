@@ -9,7 +9,10 @@ import com.vote.VotingApp.Repo.CandidateRepo;
 import com.vote.VotingApp.Repo.VoteRepo;
 import com.vote.VotingApp.Repo.VoterRepo;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public class VotingService {
     private CandidateRepo candidateRepo;
     private VoterRepo voterRepo;
@@ -39,10 +42,13 @@ public class VotingService {
         Vote vote=new Vote();
         vote.setCandidate(candidate);
         vote.setVoter(voter);
-        voteRepo.save(vote);
-
+//        voteRepo.save(vote);
+        voter.setVote(vote);
         voter.setHasVoted(true);
         voterRepo.save(voter);
         return vote;
+    }
+    public List<Vote> getAllVotes(){
+        return voteRepo.findAll();
     }
 }

@@ -2,10 +2,14 @@ package com.vote.VotingApp.Entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+//@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Vote {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

@@ -37,8 +37,9 @@ public class GlobalExceptionHandler {
         for (FieldError err:errorList){
             errors.put(err.getField(),err.getDefaultMessage());
         }
-        return new ResponseEntity<>(errors,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handelException(Exception exception){
         ErrorResponse err=new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage());

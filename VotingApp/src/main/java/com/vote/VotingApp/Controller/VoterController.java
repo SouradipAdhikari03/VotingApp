@@ -1,5 +1,6 @@
 package com.vote.VotingApp.Controller;
 
+import com.vote.VotingApp.DTO.VoterDTO;
 import com.vote.VotingApp.Entity.Voter;
 import com.vote.VotingApp.Service.VoterService;
 import jakarta.validation.Valid;
@@ -20,8 +21,8 @@ public class VoterController {
         this.voterService = voterService;
     }
     @PostMapping("/register")
-    public ResponseEntity<Voter> RegisterVoter(@RequestBody @Valid Voter voter){
-        Voter savedVoter=voterService.registerVoter(voter);
+    public ResponseEntity<Voter> RegisterVoter(@RequestBody @Valid VoterDTO voterDTO){
+        Voter savedVoter=voterService.registerVoter(voterDTO);
         return new ResponseEntity<>(savedVoter, HttpStatus.CREATED);
     }
     @GetMapping("/{id}")
