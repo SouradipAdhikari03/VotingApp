@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class VoterService {
@@ -48,8 +49,14 @@ public class VoterService {
         if (voter==null){
             throw new ResourceNotFoundException("Voter with Id: "+voterId+" not present!");
         }
-        voter.setVoterName(voterArg.getVoterName());
-        voter.setVoterEmail(voterArg.getVoterEmail());
+        if (voterArg.getVoterName()!=null){
+            voter.setVoterName(voterArg.getVoterName());
+        }if(voterArg.getVoterEmail()!=null){
+            voter.setVoterEmail(voterArg.getVoterEmail());
+        }
+        else{
+            throw new ResourceNotFoundException("Voter Name or Voter Email needed");
+        }
         return voterRepo.save(voter);
     }
     @Transactional

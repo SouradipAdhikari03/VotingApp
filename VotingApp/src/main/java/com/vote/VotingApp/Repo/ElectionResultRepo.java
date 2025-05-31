@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ElectionResultRepo extends JpaRepository<ElectionResult,Long> {
 
     Optional<ElectionResult> findByElectionName(String electionName);
+
 }
