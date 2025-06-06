@@ -1,12 +1,10 @@
 package com.vote.VotingApp.Controller;
 
-import com.vote.VotingApp.DTO.ElectionResultRequestDTO;
-import com.vote.VotingApp.DTO.ElectionResultResponseDTO;
+import com.vote.VotingApp.DTO.ElectionResultDTO.ElectionResultRequestDTO;
+import com.vote.VotingApp.DTO.ElectionResultDTO.ElectionResultResponseDTO;
 import com.vote.VotingApp.Entity.ElectionResult;
-import com.vote.VotingApp.Repo.ElectionResultRepo;
 import com.vote.VotingApp.Service.ElectionResultService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

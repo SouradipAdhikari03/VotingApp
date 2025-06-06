@@ -21,6 +21,8 @@ public class Voter {
     @NotBlank(message = "Email is required!")
     @Email(message = "Invalid Email format!")
     private String voterEmail;
+    @NotBlank(message = "Password is required!")
+    private String voterPassword;
 
     private boolean hasVoted=false;
     @OneToOne(mappedBy = "voter", cascade = CascadeType.ALL)

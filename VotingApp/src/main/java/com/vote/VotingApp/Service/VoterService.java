@@ -1,6 +1,6 @@
 package com.vote.VotingApp.Service;
 
-import com.vote.VotingApp.DTO.VoterDTO;
+import com.vote.VotingApp.DTO.VoterDTO.VoterRequestDTO;
 import com.vote.VotingApp.Entity.Candidate;
 import com.vote.VotingApp.Entity.Vote;
 import com.vote.VotingApp.Entity.Voter;
@@ -11,10 +11,8 @@ import com.vote.VotingApp.Repo.VoterRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class VoterService {
@@ -25,13 +23,21 @@ public class VoterService {
         this.voterRepo = voterRepo;
         this.candidateRepo = candidateRepo;
     }
-    public Voter registerVoter(VoterDTO voterDTO){
+    public Voter registerVoter(VoterRequestDTO voterDTO){
         if(voterRepo.existsByVoterEmail(voterDTO.getVoterEmail())){
             throw new DuplicateResourceException("Voter with email: "+voterDTO.getVoterEmail()+" already exists");
         }
         Voter voter=new Voter();
         voter.setVoterName(voterDTO.getVoterName());
         voter.setVoterEmail(voterDTO.getVoterEmail());
+        if (voterDTO.getVoterPassword() == null || voterDTO.getVoterConfirmPassword() == null){
+            throw new ResourceNotFoundException("please fill both password and confirm password !");
+        }
+        if (voterDTO.getVoterPassword().equals(voterDTO.getVoterConfirmPassword())){
+            voter.setVoterPassword(voterDTO.getVoterPassword());
+        }else {
+            throw new ResourceNotFoundException("Password mismatch");
+        }
         return voterRepo.save(voter);
     }
     public List<Voter> getAllVoter(){

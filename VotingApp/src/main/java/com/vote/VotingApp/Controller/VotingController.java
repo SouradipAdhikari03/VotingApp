@@ -1,9 +1,8 @@
 package com.vote.VotingApp.Controller;
 
-import com.vote.VotingApp.DTO.VoteRequestDTO;
-import com.vote.VotingApp.DTO.VoteResponseDTO;
+import com.vote.VotingApp.DTO.VoteDTO.VoteRequestDTO;
+import com.vote.VotingApp.DTO.VoteDTO.VoteResponseDTO;
 import com.vote.VotingApp.Entity.Vote;
-import com.vote.VotingApp.Entity.Voter;
 import com.vote.VotingApp.Service.VotingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

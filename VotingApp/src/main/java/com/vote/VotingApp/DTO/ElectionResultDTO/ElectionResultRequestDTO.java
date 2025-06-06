@@ -1,4 +1,4 @@
-package com.vote.VotingApp.DTO;
+package com.vote.VotingApp.DTO.ElectionResultDTO;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

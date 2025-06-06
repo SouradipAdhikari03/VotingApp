@@ -1,6 +1,7 @@
 package com.vote.VotingApp.Controller;
 
-import com.vote.VotingApp.DTO.VoterDTO;
+import com.vote.VotingApp.DTO.VoterDTO.VoterRequestDTO;
+import com.vote.VotingApp.DTO.VoterDTO.VoterResponseDTO;
 import com.vote.VotingApp.Entity.Voter;
 import com.vote.VotingApp.Service.VoterService;
 import jakarta.validation.Valid;
@@ -20,11 +21,19 @@ public class VoterController {
     public VoterController(VoterService voterService) {
         this.voterService = voterService;
     }
+
+
     @PostMapping("/register")
-    public ResponseEntity<Voter> RegisterVoter(@RequestBody @Valid VoterDTO voterDTO){
+    public ResponseEntity<VoterResponseDTO> RegisterVoter(@RequestBody @Valid VoterRequestDTO voterDTO){
         Voter savedVoter=voterService.registerVoter(voterDTO);
-        return new ResponseEntity<>(savedVoter, HttpStatus.CREATED);
+        VoterResponseDTO  voterRequestDTO=new VoterResponseDTO();
+        voterRequestDTO.setVoterName(voterDTO.getVoterName());
+        voterRequestDTO.setVoterEmail(voterDTO.getVoterEmail());
+        voterRequestDTO.setVoterId(savedVoter.getVoterId());
+        return new ResponseEntity<>(voterRequestDTO, HttpStatus.CREATED);
     }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Voter> GetVoter(@PathVariable Long id){
         Voter getVoter=voterService.getVoterById(id);
