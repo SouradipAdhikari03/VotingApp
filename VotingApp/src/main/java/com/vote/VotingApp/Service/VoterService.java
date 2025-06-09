@@ -10,6 +10,7 @@ import com.vote.VotingApp.Repo.CandidateRepo;
 import com.vote.VotingApp.Repo.VoterRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class VoterService {
     public VoterRepo voterRepo;
     public CandidateRepo candidateRepo;
+    private BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder(10);
     @Autowired
     public VoterService(VoterRepo voterRepo, CandidateRepo candidateRepo) {
         this.voterRepo = voterRepo;
@@ -34,7 +36,7 @@ public class VoterService {
             throw new ResourceNotFoundException("please fill both password and confirm password !");
         }
         if (voterDTO.getVoterPassword().equals(voterDTO.getVoterConfirmPassword())){
-            voter.setVoterPassword(voterDTO.getVoterPassword());
+            voter.setVoterPassword(bCryptPasswordEncoder.encode(voterDTO.getVoterPassword()));
         }else {
             throw new ResourceNotFoundException("Password mismatch");
         }

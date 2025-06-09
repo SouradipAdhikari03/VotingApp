@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -23,7 +24,7 @@ public class Config {
 public AuthenticationProvider authenticationProvider(){
     DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
     daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-    daoAuthenticationProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+    daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(12));
     return daoAuthenticationProvider;
 }
 
@@ -36,8 +37,8 @@ public AuthenticationProvider authenticationProvider(){
         //
 
         httpSecurity.authorizeHttpRequests((request)->request
-                .requestMatchers("/api/voters/*","/api/votes/*","/api/election-result/*").authenticated()
-                .requestMatchers("/api/candidate/*").permitAll()
+                .requestMatchers("/api/voters/update/*","/api/voters/delete/*","/api/votes/*","/api/election-result/*").authenticated()
+                .requestMatchers("/api/candidate/*","/api/voters/*").permitAll()
         );
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //        httpSecurity.formLogin(Customizer.withDefaults());
