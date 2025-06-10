@@ -1,13 +1,18 @@
 package com.vote.VotingApp.Controller;
 
+import com.vote.VotingApp.DTO.VoterDTO.VoterLoginDTO;
 import com.vote.VotingApp.DTO.VoterDTO.VoterRequestDTO;
 import com.vote.VotingApp.DTO.VoterDTO.VoterResponseDTO;
 import com.vote.VotingApp.Entity.Voter;
+import com.vote.VotingApp.Service.JWTService;
 import com.vote.VotingApp.Service.VoterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,15 +21,32 @@ import java.util.List;
 @RequestMapping("/api/voters")
 @CrossOrigin
 public class VoterController {
-    private VoterService voterService;
     @Autowired
-    public VoterController(VoterService voterService) {
-        this.voterService = voterService;
+     private VoterService voterService;
+//    public VoterController(VoterService voterService) {
+//        this.voterService = voterService;
+//    }
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTService jwtService;
+
+    @PostMapping("/login")
+    public String login(@RequestBody @Valid VoterLoginDTO voterLoginDTO){
+        Authentication authentication=authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(voterLoginDTO.getVoterEmail(),voterLoginDTO.getVoterPassword()));
+        if (authentication.isAuthenticated()){
+            return jwtService.generateToken(voterLoginDTO.getVoterEmail());
+        }else{
+            return "wrong credentials !";
+        }
+
     }
 
-
     @PostMapping("/register")
-    public ResponseEntity<VoterResponseDTO> RegisterVoter(@RequestBody @Valid VoterRequestDTO voterDTO){
+    public ResponseEntity<VoterResponseDTO> RegisterVoter(@RequestBody VoterRequestDTO voterDTO){
         Voter savedVoter=voterService.registerVoter(voterDTO);
         VoterResponseDTO  voterRequestDTO=new VoterResponseDTO();
         voterRequestDTO.setVoterName(voterDTO.getVoterName());
