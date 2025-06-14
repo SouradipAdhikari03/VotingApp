@@ -1,6 +1,5 @@
-package com.vote.VotingApp;
+package com.vote.VotingApp.Configuration;
 
-import ch.qos.logback.core.joran.action.NOPAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,13 +13,16 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class Config {
 @Autowired
     private UserDetailsService userDetailsService;
+
+@Autowired
+private JWTFilter jwtFilter;
 
 @Bean
 public AuthenticationProvider authenticationProvider(){
@@ -38,11 +40,25 @@ public AuthenticationProvider authenticationProvider(){
 
         //
 
-        httpSecurity.authorizeHttpRequests((request)->request
-                .requestMatchers("/api/voters/update/*","/api/voters/delete/*","/api/votes/*","/api/election-result/*").authenticated()
-                .requestMatchers("/api/candidate/*","/api/voters/*").permitAll()
+        httpSecurity.authorizeHttpRequests((request) -> request
+                .requestMatchers(
+                        "/api/voters/register",
+                        "/api/voters/login",
+                        "/api/candidate/**"
+                ).permitAll()
+
+                .requestMatchers(
+                        "/api/voters/update/**",
+                        "/api/voters/delete/**",
+                        "/api/votes/**",
+                        "/api/election-result/**"
+                ).authenticated()
+
+                .anyRequest().authenticated()
         );
-        httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 //        httpSecurity.formLogin(Customizer.withDefaults());
         httpSecurity.httpBasic(Customizer.withDefaults());
 
